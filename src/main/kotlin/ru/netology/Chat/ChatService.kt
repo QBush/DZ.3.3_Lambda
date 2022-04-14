@@ -34,7 +34,7 @@ object ChatService {
     fun getMassagesFromChat(userID: Int, chatId: Int, fromMassageId: Int, count: Int): List<Massage> {
         val chat = chats.find { it.chatId == chatId } ?: throw ChatIsNotFoundExeption()
         val unreadMassages = chat.massages
-            .filter { it.massageId >= fromMassageId }
+            .dropWhile { it.massageId < fromMassageId }
             .take(count)
         unreadMassages.filter { it.recipientId == userID }
             .forEach { it.readed = true }
